@@ -6,7 +6,7 @@
 
 在我看来，这台设备可能对于希望随时随地写两行代码的程序员更加具有吸引力。
 - 参考文章：
-  - [可以装载口袋里的开源PC](https://spectrum.ieee.org/meet-an-open-source-pc-that-can-fit-in-your-pocket)
+  - [可以装在口袋里的开源PC](https://spectrum.ieee.org/meet-an-open-source-pc-that-can-fit-in-your-pocket)
 
 ## 动向
 
