@@ -5,6 +5,8 @@
 
 ## [第001期](ISSUE_001/README.md)
 
+## [第002期](ISSUE_002/README.md)
+
 ## 订阅
 - 可通过微信公众号“从容地狂奔”订阅
 ![](weixin.png)
