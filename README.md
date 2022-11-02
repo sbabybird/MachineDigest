@@ -3,15 +3,17 @@
 
 初步考虑每周更新一次。
 
-## [第005期](ISSUE_005/README.md)
+## [第 006 期](ISSUE_006/README.md)
 
-## [第004期](ISSUE_004/README.md)
+## [第 005 期](ISSUE_005/README.md)
 
-## [第003期](ISSUE_003/README.md)
+## [第 004 期](ISSUE_004/README.md)
 
-## [第002期](ISSUE_002/README.md)
+## [第 003 期](ISSUE_003/README.md)
 
-## [第001期](ISSUE_001/README.md)
+## [第 002 期](ISSUE_002/README.md)
+
+## [第 001 期](ISSUE_001/README.md)
 
 ## 订阅
 - 可通过微信公众号“从容地狂奔”订阅
