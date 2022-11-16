@@ -3,6 +3,8 @@
 
 初步考虑每周更新一次。
 
+## [第 008 期](ISSUE_008/README.md)
+
 ## [第 007 期](ISSUE_007/README.md)
 
 ## [第 006 期](ISSUE_006/README.md)
