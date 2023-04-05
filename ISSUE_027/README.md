@@ -4,7 +4,7 @@
 ![](2023-04-04-13-51-53.png)
 AI对话机器人火爆的同时，去年由Stable-Diffusion模型引爆的AI作图技术也没有放慢进化的脚步。
 
-这里面的佼佼者(Midjourney)[https://zh.wikipedia.org/zh-cn/Midjourney]已经发展成了强大的图像生成系统。可以轻松定制出照片级图像，其效果足以乱真。
+这里面的佼佼者[Midjourney](https://zh.wikipedia.org/zh-cn/Midjourney)已经发展成了强大的图像生成系统。可以轻松定制出照片级图像，其效果足以乱真。
 
 不过目前在国内使用Midjourney还比较麻烦，即便能够访问，使用量也会受限制，能否自己搭建一个呢？
 
@@ -53,7 +53,6 @@ AI对话机器人火爆的同时，去年由Stable-Diffusion模型引爆的AI作
 其原理是大家分别加载模型的一小部分，然后与其他人一起通过协同的方式进行推理或者微调。
 ![](2023-04-04-14-27-18.png)
 
-### 为什么人类终将会进化为数字化的生命？
 ## 资源
 - [Prompt Engineering 教程](https://learningprompt.wiki/)，一份教你如何更好使好地使用 ChatGPT 和其他 AI 产品的免费教程。
   ![](2023-04-04-14-43-13.png)
