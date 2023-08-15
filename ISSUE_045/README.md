@@ -56,7 +56,7 @@
 
   Haxe 提供了强大的静态类型系统，并支持多种编译目标，包括但不限于 JavaScript、C++、Java、C#、Python 等。
 
-  感兴趣的话，这里也有[一份 Haxe 的在线教程](daobook.github.io/haxe-book/docs/start/00_intro.html)
+  感兴趣的话，这里也有[一份 Haxe 的在线教程](https://daobook.github.io/haxe-book/docs/start/00_intro.html)
 
 - [Fooocus](https://github.com/lllyasviel/Fooocus)，ControlNet 作者开源的一款新的 AI 画图工具 ，搭建起来比 Stable Diffusion webui 稍微方便了一点，相当于整合包。
   ![](2023-08-15-13-25-40.png)
