@@ -4,6 +4,8 @@
 初步考虑每周更新一次。
 
 # 2023 年 9 月
+## [第 050 期](ISSUE_050/README.md)
+
 ## [第 049 期](ISSUE_049/README.md)
 
 ## [第 048 期](ISSUE_048/README.md)
