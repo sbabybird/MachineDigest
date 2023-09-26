@@ -6,7 +6,7 @@ tags:
     - 机器文摘
 categories:
     - 机器文摘
-image: 
+image: 2023-09-26-13-36-20.png
 ---
 # 机器文摘 第 050 期
 
