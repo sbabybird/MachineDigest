@@ -6,7 +6,7 @@ tags:
     - 机器文摘
 categories:
     - 机器文摘
-image: 2023.png
+image: 2023-11-21-09-46-23.png
 ---
 # 机器文摘 第 059 期
 
