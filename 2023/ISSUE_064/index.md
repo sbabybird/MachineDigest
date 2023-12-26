@@ -6,7 +6,7 @@ tags:
     - 机器文摘
 categories:
     - 机器文摘
-image: 
+image: 2023-12-26-08-53-40.png
 ---
 # 机器文摘 第 064 期
 
