@@ -6,7 +6,7 @@ tags:
     - 机器文摘
 categories:
     - 机器文摘
-image: 
+image: 2024-03-12-08-41-28.png
 ---
 # 机器文摘 第 073 期
 
