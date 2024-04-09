@@ -4,9 +4,9 @@ date: 2024-04-09
 description: 机器文摘 第 077 期
 tags: 
     - 机器文摘
-categories: 2024-04-09-08-48-53.png
+categories: 
     - 机器文摘
-image: 
+image: 2024-04-09-08-48-53.png
 ---
 # 机器文摘 第 077 期
 
