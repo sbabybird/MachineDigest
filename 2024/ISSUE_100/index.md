@@ -70,12 +70,13 @@ Git Bash 是在 Win 系统中安装 Git 时自带的一个 shell，本意在方�
 本文以，以“Hello, World!”程序为例，介绍了x86-64汇编语言的基础知识。逐步介绍了x86-64汇编语言的特点、指令结构、寄存器使用、数据存储、程序结构和系统调用。 ​​​
 
 ### 使用纯 C 语言构建 Android 应用
+![](2024-09-24-10-03-07.png)
+
 [rawdrawandroid](https://github.com/cnlohr/rawdrawandroid)，是一个开源安卓项目框架模板，提前配置好了使用 C 语言开发构建 Android App 的全部环境。
 
 这种并非主流做法，作者提供此框架的目的也只是希望避开一些“必须”使用 Java 才能做的事情，证明只使用 C 语言也同样可以做到并且构建的成果占用资源低且效率高。
 
 ### 机器视觉入门教程
-![](2024-09-24-10-03-07.png)
 
 AI 界的 github [huggingface.co 出了一个关于机器视觉的教程](https://huggingface.co/learn/computer-vision-course/unit0/welcome/welcome)，从入门到实践，内容非常全面，也很有趣味性。
 
