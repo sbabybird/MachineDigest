@@ -74,7 +74,7 @@ iCraft Editor的主要特点：
 
 蓝光里面有个叫 PGS（Presentation Graphic Stream）的字幕格式，是以图片形式存储的字幕，扩展名一般为 .SUP。播放器在播放的时候就是跟着时间轴读取图片然后渲染到画面上。
 
-这个格式的技术信息，资料较少，这篇文章解析了 PGS 的技术规格。
+这个格式的技术信息，资料较少，[这篇文章解析了 PGS 的技术规格](https://blog.thescorpius.com/index.php/2017/07/15/presentation-graphic-stream-sup-files-bluray-subtitle-format/)。
 
 相关开源仓库：
 - https://github.com/Sec-ant/BDSupReader
