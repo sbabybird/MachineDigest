@@ -11,6 +11,8 @@
 ![](zhubai.jpg)
 
 # 2024 年 12 月
+## [第 112 期](2024/ISSUE_112/index.md)
+
 ## [第 111 期](2024/ISSUE_111/index.md)
 
 ## [第 110 期](2024/ISSUE_110/index.md)
