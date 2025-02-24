@@ -6,11 +6,9 @@
 
 ![](weixin.jpg)
 
-- 也可通过[竹白](https://zhubai.love/)进行邮件、微信小程序订阅
-
-![](zhubai.jpg)
-
 # 2025 年 2 月
+## [第 119 期](2025/ISSUE_119/index.md)
+
 ## [第 118 期](2025/ISSUE_118/index.md)
 
 ## [第 117 期](2025/ISSUE_117/index.md)
