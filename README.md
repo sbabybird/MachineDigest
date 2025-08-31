@@ -7,6 +7,8 @@
 ![](weixin.jpg)
 
 # 2025 年 8 月
+## [第 146 期](2025/ISSUE_146/index.md)
+
 ## [第 145 期](2025/ISSUE_145/index.md)
 
 ## [第 144 期](2025/ISSUE_144/index.md)
