@@ -7,6 +7,8 @@
 ![](weixin.jpg)
 
 # 2025 年 9 月
+## [第 149 期](2025/ISSUE_149/index.md)
+
 ## [第 148 期](2025/ISSUE_148/index.md)
 
 ## [第 147 期](2025/ISSUE_147/index.md)
