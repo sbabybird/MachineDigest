@@ -7,6 +7,8 @@
 ![](weixin.jpg)
 
 # 2025 年 10 月
+## [第 153 期](2025/ISSUE_153/index.md)
+
 ## [第 152 期](2025/ISSUE_152/index.md)
 
 ## [第 151 期](2025/ISSUE_151/index.md)
