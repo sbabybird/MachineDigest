@@ -7,6 +7,8 @@
 ![](weixin.jpg)
 
 # 2025 年 12 月
+## [第 162 期](2025/ISSUE_162/index.md)
+
 ## [第 161 期](2025/ISSUE_161/index.md)
 
 ## [第 160 期](2025/ISSUE_160/index.md)
