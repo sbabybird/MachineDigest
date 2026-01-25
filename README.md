@@ -7,6 +7,8 @@
 ![](weixin.jpg)
 
 # 2026 年 1 月
+## [第 167 期](2026/ISSUE_167/index.md)
+
 ## [第 166 期](2026/ISSUE_166/index.md)
 
 ## [第 165 期](2026/ISSUE_165/index.md)
