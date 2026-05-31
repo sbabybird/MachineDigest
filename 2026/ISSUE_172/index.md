@@ -102,7 +102,7 @@ image: tiny-vllm.png
 
 ### 像素字体的文艺复兴
 
-![](pixel-fonts.avif)
+![](pixel-fonts.png)
 
 《[A few interesting modern pixel fonts](https://unsung.aresluna.org/a-few-interesting-modern-pixel-fonts/)》是 Marcin Wichary 的一篇文章，在 Hacker News 上获得了 415 分。介绍了四个风格各异的现代像素字体项目：
 
