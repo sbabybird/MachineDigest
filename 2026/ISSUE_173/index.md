@@ -1,99 +1,152 @@
 ---
 title: 机器文摘 第 173 期
-date: 2026-06-07
+date: 2026-06-14
 description: 机器文摘 第 173 期
 tags: 
     - 机器文摘
 categories: 
     - 机器文摘
-image: odysseus.png
+image: transformer-zh-en.png
 ---
 # 机器文摘 第 173 期
-### 自托管的 AI 工作空间
-![](odysseus.png)
+### 从零手写 Transformer
 
-[Odysseus](https://github.com/pewdiepie-archdaemon/odysseus)，一个完全自托管的 AI 工作空间，上线一周狂揽 5.9 万星。它把聊天、Agent、深度研究、邮件、日历、笔记全部打包进一个可自部署的服务里。
+![](transformer-zh-en.png)
 
-它不像 ChatGPT 或 Claude 那样只提供聊天窗口。Odysseus 更像一个"本地 AI 操作系统"——有 Agent（基于 opencode，支持 MCP 协议和文件/Shell/记忆工具）、有 Cookbook（自动扫描你的硬件，推荐合适的本地模型并一键下载启动）、有深度研究能力（多步骤自动研究，生成可视化报告）、甚至还内置了邮箱和日历。前端的实现方式也挺有意思——纯手写 vanilla JS，没有框架没有构建工具，一个 index.html 加 app.js 就是全部前端。
+[transformer-zh-en](https://github.com/philexohf/transformer-zh-en)（⭐38），一个纯手写 Transformer 论文《Attention Is All You Need》、实现中英机器翻译的教学项目。不依赖 nn.Transformer 库，从零实现多头注意力、位置编码、掩码机制等全部组件。
 
-不过功能多也意味着复杂度高。Agent 模式下本地小模型（4k/8k context）负担很重——工具 schema、技能、记忆、文档一起挤在有限的上下文里。Cookbook 在多机器/多 GPU 环境下的可靠性也参差不齐。开源社区近万的 Star 说明大家对"自托管 AI 工作空间"的需求真实存在，但离一个没动手经验也能用顺手的成熟产品还有距离。
+在 4070 Ti 上训练 11 个 epoch，100 万句对，BLEU 达到 36.87。代码结构清晰：模型 4 层（d_model=384）、统一 BPE 分词器（SentencePiece 32K，中英共享词表）、完整的量化/推理/部署工具链。编译后的 FP16 模型仅 102MB，可直接分发。
 
-### 用自然语言画架构图
+从工程实现来看，项目最有意思的设计是双训练脚本方案——一份是优化过的现代版（AMP 混合精度 + Cosine Warmup + AdamW），另一份保留了论文原版训练逻辑作为参考对照。这种"新旧对比"的设计比单纯的教学代码更有价值：读者可以直观看到 2017 年原版训练方法和 2026 年工程优化之间的差异。
+
+局限也明显：仅 53.5M 参数和 128 token 长度限制了翻译质量的天花板，Post-LN 架构在深层网络时不如 Pre-LN 稳定，且数据仅来自单一 WMT 来源。不过作为学习《Attention Is All You Need》的配套实操项目，它比市面上大多数论文复现更完整、更易上手。
+
+### 免费本地化的剪映替代
+
+![](clypra.png)
+
+[Clypra](https://github.com/AIEraDev/Clypra)（⭐1,941），一个仅 7 周就快速攀升的开源视频编辑器。用 Tauri + React + TypeScript 打造，核心目标是让 CapCut/剪映 Pro 的付费高级功能全部本地免费化。
+
+技术栈上走了一条轻量路线：Tauri 2 的 Rust 壳让安装包只有 9-15MB（对比 Electron 方案的 80MB+），FFmpeg 作为 sidecar 提供编解码能力，Zustand 管理多轨时间线状态。支持帧级修整、音频波形可视化（Peak + RMS + mirrored 显示）、胶片条预览和文字叠加（20+ 字体）。
+
+站在对比的角度看，它和 LosslessCut（无损切割工具）、Olive（专业 NLE）、Shotcut 等开源视频编辑器定位不同——Clypra 明确瞄准的是"剪映 Pro 代餐"这个生态位，而不是和 DaVinci Resolve 竞争。MIT 许可证也比 GPL 更友好。
+
+当前阶段基础剪辑功能已可用，但特效/转场/滤镜尚在路线图中，音频处理也相对基础（无混音、音量包络线）。461 个 commits 中的 451 个来自同一位开发者 AIEraDev，bus factor 较高。
+
+### 复制即收藏，AI 帮你整理
+
+![](openwiki.png)
+
+[OpenWiki](https://github.com/kdsz001/OpenWiki)（⭐367），基于 Tauri 2 + React + Rust 的开源桌面知识管理工具。核心创新在于"先捕获后整理"的交互模式。
+
+平时你复制内容（文本/图片/URL）时，桌面会自动弹出一个保存窗口，10 秒后自动消失。你只需要决定留不留，剩下的分类、整理、关联全交给 AI 后台处理。AI 会分两阶段编译知识库：先评估内容是否值得入库（只保留概念、方法论、技术原理等有长期价值的内容），再分析新内容与现有知识库的关联——是创建新 Wiki 页面还是更新已有页面。
+
+技术实现上有几个值得注意的设计：Rust 后端的 AI 引擎（`ai/wiki_engine.rs`）用两阶段 Prompt 控制知识编译质量；SQLite 本地存储保证隐私优先；知识图谱通过 TF-IDF 余弦相似度自动构建页面间关联；支持 Claude、OpenAI、Gemini 和本地模型（Ollama、LM Studio）多种 AI 后端。
+
+值得注意的是它提供了"注意力分析"功能——每周一键生成 7 维度洞察报告（信息饮食、遗忘墓地、盲区、行动建议等），用户点赞或忽略后 AI 逐渐学习偏好。如果你也是那种"收藏了一堆东西但从没整理过"的人，OpenWiki 的交互设计可能正好戳中了痛点。
+
+### ComfyUI 开始走下极客神坛
+
+![](comfyui-app-mode.png)
+
+ComfyUI 最近一口气发了三个更新，单独看每个都是功能增强，连在一起看就是一个清晰的战略转身。
+
+首先是 **App Mode**。以前你用 ComfyUI，打开就是满屏节点和连线，跟看电路图似的。现在一键切换到 App Mode，节点图被隐藏，只暴露核心输入/输出界面——你选好模型、填好参数、点生成，就像用一个普通 App 一样。技术实现基于 Vue 3 + Pinia 状态机，输入输出选择通过 Builder 模式配置后持久化到工作流 JSON。
+
+其次是 **ComfyHub**，一个建立在 registry.comfy.org 之上的节点/模型/工作流市场，把过去"git clone + 拖拽文件夹"的安装方式降级为一键操作。内置三种数据库模式（本地缓存 / 远程实时 / 频道缓存）适配不同网络环境。
+
+最后是 **DeepSeek R1 推理模型集成**，通过 Partner Nodes（API 节点）系统让 ComfyUI 可以调用云端推理模型的能力。
+
+从用户角度来看，这三个更新构成了一个完整的分层：零基础用户用 App Mode，中级用户用 ComfyHub 安装插件，高级用户操作底层节点图并用 R1 辅助推理。ComfyUI 不想只做极客玩具了。
+
+### 让《史记》变成可交互的知识网络
+
+![](shiji-kb.png)
+
+[史记知识库](https://github.com/baojie/shiji-kb)（⭐2,100），一个把 57 万字《史记》变成可交互知识网络的深度知识工程。14,065 个实体、3,198 个事件、7,637 条关系全部结构化。
+
+技术上最有意思的是其"四层语义递进模型"：结构语义（校勘、段号、句间关系）→ 图谱语义（实体标注、事件提取）→ 知识语义（本体构建、逻辑推理）→ 应用语义（矛盾检测、模式发现）。整条管线不是传统 NLP 程序，而是一套 SKILL 文档驱动的 AI Agent 管线——每步对应一份结构化自然语言文档（SKILL），AI Agent 读 SKILL → 执行 SKILL → 产出结果。这种"用文档代替代码"的方法论让管线可读性极高，学者可以直接阅读并验证每个处理步骤的合理性，而无需理解编程语言。
+
+目前已发现的高价值矛盾包括：项羽东城斩首数在不同篇章相差 1000 倍、太子丹之死年代差 4 年、长平之战 40 万降卒的数字反常等。
+
+产品端的亮点是"史记地铁图"——130 条历史线路 × 3,197 个事件站点，1,876 个跨章换乘站（同一事件出现在不同篇章），全部用纯前端 SVG 实现。22 类实体语法高亮（人名红色、地名绿色、官职蓝色……）让原文阅读体验大幅提升。
+
+局限在于前端加载 130 章全文数据较慢，约 1.3% 的事件因记载模糊无法推断精确公元年，且标注规范仍在动态演进中。
+
+### 一句话生成架构图
+
 ![](next-ai-draw-io.png)
 
-[next-ai-draw-io](https://github.com/DayuanJiang/next-ai-draw-io)，一个基于 Next.js 的开源项目，你用自然语言描述，它就能生成 draw.io 架构图、流程图、思维导图。GitHub 上已经有 3.1 万星。
+[next-ai-draw-io](https://github.com/DayuanJiang/next-ai-draw-io)（⭐31,894），一个把 LLM 和 draw.io 深度集成的项目。你只需要用自然语言描述需求，AI 就能生成完整的 draw.io 可编辑图表（架构图、流程图、思维导图），生成后还能在 draw.io 编辑器中继续手动/拖拽调整。
 
-它的实现思路是：通过 Vercel AI SDK 调用 LLM，AI 生成 draw.io 格式的 XML，渲染到嵌入的 draw.io iframe 中。最有意思的是它的 VLM（视觉语言模型）验证循环——AI 生成 XML 后，系统会对渲染结果截图，用另一个视觉模型验证布局是否合理、元素有没有重叠，如不合格则重试。这解决了纯文本生成可视化内容时最常见的"语法对了但看起来一团糟"的问题。
+技术实现的核心机制在 `/api/chat` 端点中。System Prompt 约 1900 tokens，包含完整的 draw.io XML 结构规范、7 条边路由防重叠规则、4 种工具定义（`display_diagram` / `edit_diagram` / `append_diagram` / `get_shape_library`）。AI 通过工具调用生成 mxCell XML，实时流式渲染到画布上。还有一个 VLM（视觉语言模型）验证环节，对渲染后的图表截图做质量检测。
 
-工程上也有一些认真的考量：SSRF 防护（对私有 IP 段的严格阻止）、完整的 undo/redo 历史（IndexedDB 本地快照）、MCP 服务器支持（让 Claude Desktop 等客户端能直接调用它的图表生成能力）。从工程角度来看，这是一个把 AI 集成进既有工具（draw.io）的优雅范例——不是造新轮子，而是给已有工具装上了自然语言接口。
+有意思的设计是增量编辑：AI 可以通过 `edit_diagram` 工具做小范围修改（搜索-替换模式），只改目标元素而不重新生成整幅图。同时每次编辑前自动保存快照，可以随时回滚。
 
-### Windows 上的 Unix 原味命令
-![](microsoft-coreutils.png)
+项目支持 14+ 模型提供商（OpenAI、Claude、Gemini、DeepSeek、Ollama 等），并提供 MCP 服务器，可以集成到 Claude Desktop、Cursor、VS Code 等 AI 编码工具中。
 
-[microsoft/coreutils](https://github.com/microsoft/coreutils)，微软官方维护的 Windows 版 Unix coreutils。不是通过 WSL 模拟，而是原生的 Windows 二进制，通过 WinGet 一键安装就能在 cmd 或 PowerShell 里用 `cat`、`ls`、`find`、`grep` 等几十个 Unix 命令。
+不过 Web 版的 PDF 导出受限（iframe 中无法正常工作），非视觉模型无法处理图片上传，且 AI 生成的 XML 受输出长度限制（约 8K tokens），复杂图标需要多次 `append_diagram`。
 
-它的实现基于 uutils/coreutils——用 Rust 而非 C 重写的 coreutils。微软将其 fork 并通过 git submodule 引入，做了 Windows 原生的适配。最有技术亮点的是 `find` 命令设计了一个"双语启发式调度"：如果参数看起来像 DOS 语法（`/C`、`/I`），自动路由到 DOS 兼容版；如果像 GNU 语法（`-name`、`-type`），路由到 GNU 版。同一个 `find` 命令，两边的人都觉得是自己的。
+### 每一帧都完美
 
-目前还在 preview 阶段，仅 16 次提交。不支持 `chmod`、`chown` 等 POSIX 概念，也不支持信号相关命令。但如果你在纯 Windows 环境工作又习惯了 Unix 命令行，这个工具可以让你的日常工作干净不少——至少不用为了一个 `cat` 去装整个 WSL。
+![](every-frame-perfect.png)
 
-### 信号级的电视雪花模拟
-![](ntsc-rs.png)
+Nikita Prokopov（tonsky.me）写了一篇关于 UI 动画品质的短文 [Every Frame Perfect](https://tonsky.me/blog/every-frame-perfect/)，在 HN 上获得 481 分。核心观点借用了 Wayland 显示协议的核心理念：无论何时截图你的应用，画面都必须合理、完美。
 
-[Ntsc-rs](https://ntsc.rs/)，一个用 Rust 写的高精度 NTSC/VHS 伪影模拟器。它不是简单地在画面上叠加噪点，而是从底层物理信号出发，模拟 NTSC 编码、调制、解调、传输损耗和磁带机械特性的完整信号链。
+文章列举了几个典型案例：Safari 表单项的占位文本从中间动画但光标从左位置开始——两个组件不同步，破坏了信任感；Apple Photos 的裁剪模式切换中图片瞬间到位但裁剪边框动画过渡，造成"好像有什么变了"的错觉；YouTube 矩形移动动画的表现则让作者感叹"技术超越了程序员的掌控"。
 
-大多数视频滤镜（比如 Red Giant Universe VHS）用 LUT 和简单叠加来"看起来像"VHS。ntsc-rs 走的是完全不同的路线——它把 RGB 转成 YIQ 色彩空间，用 IIR 数字滤波器模拟色度带宽限制，用 Simplex 噪声的分形布朗运动生成复合信号噪声，甚至模拟了 VHS 磁头切换时的水平偏移和磁带速度对亮度/色度截止频率的影响。
+虽然篇幅不长，但 Nikita 点出了一个容易被忽视的问题：很多人只关注起始状态和结束状态好不好看，却不在乎中间过渡过程是否合理。而用户真正感受到的，恰恰是这些中间帧。
 
-性能上也很认真：核心算法用 Rust 实现并对 SIMD 做了针对性优化（4/6/8 行并行），使用 `rayon` 进行画面行的并行处理。它提供了 Adobe After Effects 插件、OpenFX 插件（DaVinci Resolve/Vegas）以及独立的桌面应用。如果你是做影视后期或复古效果，这个工具比常见的 VHS 滤镜认真得多。
+### 21 个 FFmpeg 零日漏洞
 
-### 给 LLM 的上下文做胃缩小手术
-![](headroom.png)
+![](ffmpeg-zerodays.png)
 
-[Headroom](https://github.com/chopratejas/headroom)，一个本地运行的上下文压缩层，能把发送给 LLM 的工具输出、日志、RAG 数据等压缩 60-95% 的 token，同时保持回答质量。本周 GitHub 趋势榜第一（1.5 万星）。
+[depthfirst](https://depthfirst.com/research/21-zero-days-in-ffmpeg) 安全团队用 AI Agent 在 FFmpeg 中发现了 21 个零日漏洞。他们构建了一个安全专用 Agent，和通用编码 Agent 不同——先做威胁建模（理解架构、识别暴露的解析器入口），再并行分支测试多种假设，跟踪执行路径验证输入是否到达易受攻击的 sink 点。
 
-它有六种不同的压缩算法应对不同场景：SmartCrusher 用 Kneedle 算法 + SimHash 去重处理 JSON 数组、LogCompressor 识别结构化日志做去重和异常优先保留、SearchCompressor 对 grep 结果做自适应采样。最精妙的设计是 CCR（可逆压缩）——压缩后的原始数据用 SHA256 哈希存储在本地，LLM 可通过 `headroom_retrieve` 工具按需还原。这就让压缩变得"无损"——需要的时候可以随时找回被压缩掉的内容。
+9 个已分配 CVE，12 个内部跟踪。漏洞类型以 Heap Buffer Overflow 居多（12 个），其次是 Stack Overflow、Integer Overflow 等。最老的漏洞可追溯到 2003 年和 2005 年的代码，分别潜伏了 23 年和 20 年。最危险的是 RTP AV1 Depacketizer 漏洞（DFVULN-127），仅需 183 字节的攻击包即可实现远程代码执行，无需认证。
 
-但它也有一个很有意思的保守设计：CodeCompressor 虽然实现了，但默认几乎不触发。如果提示词包含 "analyze/review/fix/debug" 等关键词，所有代码都不压缩。设计者的理由是"代码几乎总是用户想处理的内容，压缩函数体会消除用户需要的部分"——这是比技术实现更重要的 UX 判断。
+从安全实践角度看，这次研究的价值不在于发现了多少漏洞，而在于方法论上的突破：AI 安全 Agent 能以 $1k 的成本发现 Google Big Sleep（$？）和 Anthropic Mythos（$10k）遗漏的漏洞。对于 FFmpeg 这种有 150 万行 C 代码、经历了 20 多年不间断 fuzzing 的项目来说，这说明传统的基于覆盖率的 fuzzing 已经无法覆盖所有攻击面。
 
-### 100k FPS 的宝可梦绿宝石
-![](pokeemerald.png)
+### 在调音台上跑 DOS
 
-[Pokemon Emerald Ported to WebAssembly](https://pokeemerald.com/)（268 分 HN）。这个项目把 GBA 的《宝可梦绿宝石》从 C 源码（基于 pret/pokeemerald 反编译项目）重新编译成 WebAssembly，让游戏在浏览器中原生运行——不需要模拟器。
+![](behringer-dos.png)
 
-100k FPS 的秘诀在于：它不是运行 GBA 模拟器（模拟器需要逐条解码指令），而是把游戏源码直接编译成 Wasm。游戏循环直接操作 Wasm 线性内存，一个帧步进只需微秒级。JavaScript 端实现了一个完整的软件渲染器，直接读取 Wasm 内存中的 VRAM/调色板/OAM 寄存器，用 Canvas 2D 绘制画面。在 "unlimited" 模式下，一个 requestAnimationFrame 周期内尽可能多地运行帧处理，单帧耗时 <0.01ms，一秒钟就能跑 10 万帧。
+Chris（chrisdevblog.com）在 Behringer DDX3216 数字调音台里发现了一颗 AMD Elan SC300（386 SoC）处理器，于是产生了一个"不合理但合法"的想法——[从零写一个 BIOS，让它运行 DOS](https://chrisdevblog.com/2026/06/08/running-dos-on-behringers-ddx3216-using-a-diy-x86-bios/)。
 
-当然，这是有代价的——为了达到这个帧率，移除了音频处理，渲染器也不是 100% GBA 硬件精确。但它展示了一个很有趣的工程思路：有时候"直接编译到目标平台"比"通过模拟器运行"更高效。
+挑战接踵而至：找不到现成的 BIOS 源码（联系了 PC Engines 和 Phoenix，资料都丢了），只能从 Reset Vector 开始手写；外置 UART 需要逆向硬件电路找出片选逻辑；LCD 不含字库 ROM，用 AI（Gemini）生成了 8×8 点阵 ASCII 字体；CF 卡默认 PCMCIA 模式，需要通过 Card Information Structure 切换到 TrueIDE Mode。
 
-### 零配置 + eBPF 脚本的 Web 服务器
-![](zeroserve.png)
+最终结果：MS-DOS 6.22 卡在 INT 0x15 中断调用上（原因未查明），但 FreeDOS v1.4 成功启动进入 Shell。总耗时约 3 周。
 
-[Zeroserve](https://su3.io/posts/introducing-zeroserve)（HN 182 分），一个用 Rust 写的、基于 io_uring 的高性能 Web 服务器。它的理念很激进：没有配置文件——你把 eBPF 程序作为"配置文件"放进网站 tarball，每个请求上这些程序会以用户态沙箱的方式运行，实现路由、鉴权、限流、反向代理等一切逻辑。
+作者出生于 90 年代，第一台电脑是 486。32 年后，他在一台调音台的 386 上跑起 DOS——这不是有什么实际用途的项目，但极客的浪漫从来就不需要"用途"来证明。
 
-作者认为传统服务器（nginx/Caddy）的问题在于行为分散在两个层：声明式指令 + 脚本运行时。Zeroserve 只有一层——程序即配置。eBPF 程序按文件名排序链式执行，共享每个请求的元数据 map。提供的辅助函数包括 SHA-256、HMAC、JSON 解析、token bucket 限流、AWS SigV4 签名，甚至完整的 OIDC Authorization Code + PKCE 流程——纯静态网站也能做"用 Google 登录"。
+### 40 年前的 FPU 加法器
 
-基准测试显示它在小文件静态服务上领先 nginx 约 17%，在 eBPF 脚本中间件场景领先 nginx Lua 约 50%，但在大响应反向代理场景落后 nginx 约 38%。项目由实习生级别的开发者 Heyang Zhou 一人完成（38 次 commit），处于早期阶段，且依赖 Linux 特有的 io_uring 和 eBPF，macOS/Windows 无法直接运行。
+![](intel-8087-adder.png)
 
-### 穿上 Fluent Design 外套的 VLC
-![](screenbox.png)
+Ken Shirriff（righto.com）又做了一次精彩的芯片逆向——这次是 [Intel 8087 浮点协处理器中的 69 位加法器](https://www.righto.com/2026/06/intel-8087-adder-reverse-engineered.html)。8087 于 1980 年发布，是 x86 浮点运算的始祖，其设计直接影响了 IEEE 754 浮点标准的制定。
 
-[Screenbox](https://github.com/huynhsontung/Screenbox)，一个基于 LibVLC 引擎、用 UWP 构建的开源媒体播放器。它的核心卖点是颜值——Fluent Design 全面应用，丙烯酸材质、Mica 背景、流畅动画，和 Windows 10/11 的原生设计语言无缝融合。
+Ken 逆向发现的核心设计是 69 位曼彻斯特进位链加法器（4-bit 分块 + 进位跳跃）。"曼彻斯特进位链"这个技术的命名源自 1959 年曼彻斯特大学 Atlas 计算机，本质是利用 Generate/Propagate/Delete 三信号的并行计算，让进位以电信号速度（而非逻辑门速度）传播。
 
-它继承了 VLC 的全面格式支持（MKV、MP4、FLAC、HDR10、杜比视界），启动速度和资源占用比 VLC 还轻快。UWP 原生特性带来了手势操作、画中画模式、系统媒体控件集成（SMTC）、一键截图保存视频帧等现代交互。快捷键也做了符合现代习惯的调整——数字 1-4 快速切换窗口尺寸，类似 YouTube。
+有意思的工程细节是 NMOS 工艺约束下的设计取舍：预充电技术（进位线预充到 5V 代表无进位，NMOS 管拉低到地代表有进位）、进位跳跃（4 位一组，组内全 Propagate 时跳过整组）、以及 69 位而非 64 位的设计（3 个舍入位 + 1 个加倍位 + 1 个符号位）。
 
-局限也很明显：UWP 框架意味着它只能在 Windows 10/11 和 Xbox 上运行。微软正逐步向 WinUI 3 / Windows App SDK 迁移，UWP 处于维护模式。如果追求跨平台，VLC 原生客户端或者 IINA（macOS）才是合理选择。但在 Windows 上，如果你想找一个既漂亮又继承了 VLC 解码能力，还支持触控的播放器，Screenbox 是目前最好的选择。
+和 Pentium 时代才普及的 Kogge-Stone 加法器相比，8087 的曼彻斯特进位链在复杂度与性能之间取得了精妙的平衡——以最少的晶体管获得了足够快的速度。
 
-### 和 AI 做语音交互的桌面伴侣
-![](open-llm-vtuber.png)
+### 花$2000不破产在家跑AI编码
 
-[Open-LLM-VTuber](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber)，一个开源的语音交互 AI 桌面伴侣。它把 ASR 语音识别、LLM 对话、TTS 语音合成、Live2D 虚拟形象串联成一条完整的交互链路，且支持完全离线本地运行。
+![](ai-coding-at-home.png)
 
-技术架构是模块化设计的典范：ASR（支持 sherpa-onnx、Faster-Whisper、FunASR 等多种引擎）、LLM（支持 Ollama、OpenAI、Anthropic、Gemini、DeepSeek 以及各种本地 HuggingFace 模型）、TTS（支持 sherpa-onnx、Edge TTS、MeloTTS、GPTSoVITS、CosyVoice 等），每个环节都可以独立替换。语音打断功能也很实用——系统通过判断是用户正在讲话还是 AI 自己在发声，不需要耳机也能避免 AI 听到自己的声音。此外还提供了触控反馈、桌面宠物模式（透明背景置顶）、视觉感知（摄像头/屏幕截图）等增强体验。
+两篇同日登上 HN 首页的文章探讨了同一个问题：[在家跑 AI 编码，怎么不破产？](https://stephen.bochinski.dev/blog/2026/06/13/ai-coding-at-home-without-going-broke/)
 
-值得注意的是项目正处于 v1→v2 重写的关键阶段，长期记忆功能在 v2.0 重构中，v1 不再新增功能。Live2D 的示例模型有商业使用限制，开发者需要注意。整体来说，这是一个帮你把 LLM 从"终端里的对话"变成"桌面上会说话的小伙伴"的开源解决方案。
+Stephen Bochinski 的文章是概念性的，提出三条路径（自托管硬件 / API 按需付费 / 订阅高端模型），推荐混合方案——用前沿模型做"硬思考"和写 spec，用 API 调用开源模型填代码。他估算 $1,000/月可以产出 20 人团队一个月的成果。
+
+iMil 的实战帖则给出了具体配置：[RTX 5080 (16GB) + RTX 3090 (24GB) = 40GB 合显存](https://imil.net/blog/posts/2026/rtx-5080-+-rtx-3090-setup-80+-tok-s-on-qwen-3.6-27b-q8/)，搭配 Asus X570-Pro 主板（支持 PCIe 拆分为 2x8），Qwen 3.6 27B Q8_0 GGUF 模型实测 80-91 tok/s。关键优化是 MTP（Multi-Token Prediction）推测解码和 llama.cpp 的 tensor 级别多 GPU 分摊。
+
+几个工程细节值得注意：NCCL 关闭后性能反而更好（两张不同代 GPU 无法启用 P2P 直连）；`-ts 2,3` 参数按 3090:5080 = 2:3 分配负载；KV 缓存 Q8 量化后统一管理。即使 40GB 合显存也远不够跑 Opus/Sonnet 级别的大型模型。
 
 ## 订阅
 这里会不定期分享我看到的有趣的内容（不一定是最新的，但是有意思），因为大部分都与机器有关，所以先叫它"机器文摘"吧。
 
-Github 仓库地址：https://github.com/sbabybird/MachineDigest
+Github仓库地址：https://github.com/sbabybird/MachineDigest
 
 喜欢的朋友可以订阅关注：
 
