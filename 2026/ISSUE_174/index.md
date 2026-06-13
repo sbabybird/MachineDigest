@@ -1,14 +1,14 @@
 ---
-title: 机器文摘 第 173 期
+title: 机器文摘 第 174 期
 date: 2026-06-14
-description: 机器文摘 第 173 期
+description: 机器文摘 第 174 期
 tags: 
     - 机器文摘
 categories: 
     - 机器文摘
 image: transformer-zh-en.png
 ---
-# 机器文摘 第 173 期
+# 机器文摘 第 174 期
 ### 从零手写 Transformer
 
 ![](transformer-zh-en.png)
