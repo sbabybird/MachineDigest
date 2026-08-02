@@ -6,6 +6,8 @@
 
 ![](weixin.jpg)
 
+# 2026 年 8 月
+## [第 181 期](2026/ISSUE_181/index.md)
 # 2026 年 7 月
 ## [第 180 期](2026/ISSUE_180/index.md)
 ## [第 179 期](2026/ISSUE_179/index.md)
