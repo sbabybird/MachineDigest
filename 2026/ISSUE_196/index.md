@@ -92,8 +92,6 @@ WAF 和 CDN 帮不上忙，除非它自己终结 HTTP/2 再改写请求。查一
 
 ### 一块显示器，把下载速度砍掉 75%
 
-![](studiodisplay.png)
-
 [Oscar Molnar 的排查记录](https://blog.tymscar.com/posts/studiodisplayethernet/)，2.5 Gbps 对称宽带，某天下载只有 600 Mbps，上传却还有 2.4 Gbps。
 
 ISP 没问题，路由器没问题，网线直连、USB 网卡直连 Mac 都跑 2.3 Gbps。问题出在他把外设全接到 2026 款 Studio Display XDR 上、走“一根线”之后。网卡是绿联的 USB-C 转 2.5G（Realtek RTL8156B），挂在显示器 USB Hub 下。关键现象：走显示器时 ping 有约 10% 丢包，但 macOS 日志里没有丢帧记录——包在到电脑之前就丢了。
