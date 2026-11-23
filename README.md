@@ -7,6 +7,7 @@
 ![](weixin.jpg)
 
 # 2026 年 11 月
+## [第 196 期](2026/ISSUE_196/index.md)
 ## [第 195 期](2026/ISSUE_195/index.md)
 ## [第 194 期](2026/ISSUE_194/index.md)
 ## [第 193 期](2026/ISSUE_193/index.md)
